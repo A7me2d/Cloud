@@ -27,19 +27,18 @@
           <p class="pt-3" [ngClass]="{'fade': activeItemIndex !== null && imageChanged }">
             {{description}}</p>
           <button class="btn btn-outline-primary rounded-end-5 rounded-start-5 px-4"
-            [ngClass]="{'fade': activeItemIndex !== null && imageChanged }">
-            تابع القراءة <i class="fa-solid fa-up-right-from-square"></i>
+            [ngClass]="{'fade': activeItemIndex !== null && imageChanged }">{{read}}<i class="fa-solid fa-up-right-from-square px-2"></i>
           </button>
         </div>
 
       </div>
     </div>
 
-    <div class="row mt-5 d-flex justify-content-between flex-row-reverse">
-      <div class="col-sm-6 col-md-4 col-lg-2 p-0 mt-3" *ngFor="let item of data; let i = index">
+    <div class="row mt-5 d-flex justify-content-between">
+      <div class="col-sm-6 col-md-4 col-lg-2 p-0 mt-3" *ngFor="let item of alldata; let i = index">
         <div class="card text-end" [class.active-card]="activeItemIndex === i" (click)="toggleActive(i, item)">
           <div class="position-relative m-2">
-            <img [src]="item.img" class="card-img-top w-100 rounded-3" alt="" />
+            <img [src]="item.img" class="card-img-top w-100 rounded-3" alt="fade-Image" />
             <div class="overlay-section"></div>
           </div>
           <div class="card-body py-0 px-2 pb-2">
@@ -52,5 +51,5 @@
 </section>
 
 <div class="loding" [class.hide]="!isLoading">
-<span class="loader"></span>
+  <span class="loader"></span>
 </div>

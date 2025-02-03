@@ -13,7 +13,8 @@ import { ServivesService } from '../../servives.service';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit {
-  data: any = [];
+  alldata: any = [];
+  read = 'تابع القراءة '
   headerTitle: string = '';
   description: string = '';
   place: string = '';
@@ -40,11 +41,11 @@ export class HomeComponent implements OnInit {
       (response => response.json())
     ).then((response) => {
       this.isLoading = false;
-      this.data = response;
-      this.headerTitle = this.data[4].name;
-      this.description = this.data[4].dic;
-      this.backgroundImage = this.data[4].img;
-      this.place = this.data[4].location;
+      this.alldata = response;
+      this.headerTitle = this.alldata[4].name;
+      this.description = this.alldata[4].dic;
+      this.backgroundImage = this.alldata[4].img;
+      this.place = this.alldata[4].location;
     },
       (error) => {
         console.error(error);
@@ -53,39 +54,58 @@ export class HomeComponent implements OnInit {
   }
 
   startAutoChange(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+
     this.intervalId = setInterval(() => {
-      if (this.activeItemIndex === null || this.activeItemIndex === this.data.length - 1) {
+      if (this.activeItemIndex === null || this.activeItemIndex === this.alldata.length - 1) {
         this.activeItemIndex = 0;
       } else {
         this.activeItemIndex++;
       }
-
-      this.imageChanged = true;
-      setTimeout(() => {
-        this.imageChanged = false;
-      }, 3000);
+      this.imageLoaded();
 
       this.updateActiveItem(this.activeItemIndex);
     }, 6000);
   }
 
+
   updateActiveItem(index: number): void {
-    const item = this.data[index];
-    this.headerTitle = item.name;
-    this.description = item.dic;
-    this.place = item.location;
-    this.backgroundImage = item.img;
-    this.activeItemIndex = index;
+    setTimeout(() => {
+      const item = this.alldata[index];
+      this.headerTitle = item.name;
+      this.description = item.dic;
+      this.place = item.location;
+      this.backgroundImage = item.img;
+      this.activeItemIndex = index;
+      this.slider = item.slider;
+
+      this.startAutoChange();
+
+    }, 1000);
+
+  }
+
+  imageLoaded() {
     this.imageChanged = true;
-    this.slider = item.slider;
     setTimeout(() => {
       this.imageChanged = false;
-    }, 20000);
+
+    }, 4000);
+
+    // this.startAutoChange();
   }
 
   toggleActive(index: number, item: any): void {
     this.activeItemIndex = index;
     this.updateActiveItem(index);
+    this.startAutoChange();
+    this.imageChanged = true;
+
+    setTimeout(() => {
+      this.imageChanged = false;
+    }, 2000);
   }
 
 }
